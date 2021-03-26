@@ -9,9 +9,8 @@ $taskA = new TaskA();
 
 $it = 1;
 foreach (array_combine($inputs, $outputs) as $input => $output) {
-    echo "<p>TEST #".$it."\t";
+    echo "<p>TEST #" . $it . "\t";
     $taskA->checkTask($input, $output);
     echo "</p>";
     $it++;
 }
-
