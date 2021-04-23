@@ -6,6 +6,11 @@ use DateTime;
 use Exception;
 use PDO;
 use PDOException;
+use PHPMailer\PHPMailer\PHPMailer;
+
+require  '../lib/src/Exception.php';
+require '../lib/src/PHPMailer.php';
+require '../lib/src/SMTP.php';
 
 class Database
 {
@@ -62,17 +67,8 @@ class Database
             $response = [];
             // Если получилось добавить запись в БД
             if ($success) {
-                // Формируем тему письма
-                $subject = '=?utf-8?B?' . base64_encode('Новая заявка с формы') . '?=';
-                // Формируем текст сообщения
-                $message = $data['content'];
-                // Формируем хеддер для отправки письма
-                $headers = 'From: ' . $data['email'] .
-                    "\r\nReply-to: " . $data['email'] .
-                    "\r\nContent-type: text/html; charset=utf-8";
-
                 // Пытаемся отправить письмо на почту менеджера
-                mail($this->settings['manager_email'], $subject, $message, $headers);
+                self::sendMail($data);
 
                 // Получаем текущее время
                 $time = new DateTime();
@@ -111,5 +107,37 @@ class Database
 
             return ['error' => $regexMatch[1][0]];
         }
+    }
+
+    /**
+     * Функция для отправки письма на почту
+     *
+     * @param array $data (данные для отправки на почту)
+     *
+     */
+    private function sendMail(array $data): void
+    {
+        $mail = new PHPMailer(false);
+        //Server settings
+        $mail->isSMTP();
+        $mail->Host       = 'smtp.gmail.com';
+        $mail->SMTPAuth   = true;
+        $mail->Username   = $this->settings['manager_login'];
+        $mail->Password   = $this->settings['manager_password'];
+        $mail->SMTPSecure = 'ssl';
+        $mail->Port       = 465;
+        $mail->CharSet    = 'UTF-8';
+
+        //Recipients
+        $mail->setFrom($this->settings['manager_email'], 'Менеджер формы');
+        $mail->addAddress($this->settings['manager_email'], 'Менеджер формы');
+        $mail->addAddress($data['email']);
+
+        //Content
+        $mail->isHTML(false);
+        $mail->Subject = 'Новая заявка с формы';
+        $mail->Body    = $data['content'];
+
+        $mail->send();
     }
 }
