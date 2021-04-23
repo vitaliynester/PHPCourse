@@ -1,0 +1,38 @@
+version: '3.1'
+services:
+
+  php:
+    container_name: feedback_site
+    build: php-fpm
+    restart: always
+    ports:
+      - '9002:9000'
+    volumes:
+      - ../.:/var/www/feedback:cached
+    links:
+      - db
+
+  db:
+    container_name: feedback_db
+    image: postgres
+    restart: always
+    ports:
+      - '5435:5432'
+    volumes:
+      - ./postgres/create_table.sql:/docker-entrypoint-initdb.d/1-schema.sql
+      - ./postgres/trigger_before_insert.sql:/docker-entrypoint-initdb.d/2-data.sql
+      - ./data/postgres:/var/lib/postgresql/data
+    env_file:
+      - ./postgres/database.env
+
+  nginx:
+    container_name: feedback_nginx
+    restart: always
+    build: nginx
+    ports:
+      - '80:80'
+    links:
+      - php
+    volumes:
+      - ../.:/var/www/feedback:cached
+      - ./var/logs/nginx/:/var/log/nginx:cached
