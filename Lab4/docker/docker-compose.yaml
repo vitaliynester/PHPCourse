@@ -1,0 +1,38 @@
+version: '3.1'
+services:
+
+  php:
+    container_name: injection_site
+    build: php-fpm
+    restart: always
+    ports:
+      - '9002:9000'
+    volumes:
+      - ../.:/var/www/injection:cached
+    links:
+      - db
+
+  db:
+    container_name: injection_db
+    build: postgres
+    restart: always
+    ports:
+      - '5435:5432'
+    volumes:
+      - ./postgres/create_table.sql:/docker-entrypoint-initdb.d/1-schema.sql
+      - ./postgres/user_data.sql:/docker-entrypoint-initdb.d/2-data.sql
+      - ./data/postgres:/var/lib/postgresql/data
+    env_file:
+      - ./postgres/database.env
+
+  nginx:
+    container_name: injection_nginx
+    restart: always
+    build: nginx
+    ports:
+      - '80:80'
+    links:
+      - php
+    volumes:
+      - ../.:/var/www/injection:cached
+      - ./var/logs/nginx/:/var/log/nginx:cached
