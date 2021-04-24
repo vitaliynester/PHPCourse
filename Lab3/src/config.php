@@ -8,5 +8,7 @@ return [
     'db_name' => 'feedback_db',
     'db_host' => 'feedback_db',
     'db_port' => 5432,
-    'manager_email' => 'manager.form.lstu@gmail.com',
+    'manager_email' => 'elemabor@gmail.com',
+    'manager_login' => '',
+    'manager_password' => ''
 ];
