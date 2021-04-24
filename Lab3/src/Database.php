@@ -73,11 +73,11 @@ class Database
                 // Получаем текущее время
                 $time = new DateTime();
                 // Формируем тело ответа
-                $response['first_name'] = $data['first_name'];
-                $response['last_name'] = $data['last_name'];
-                $response['patronymic'] = $data['patronymic'];
-                $response['email'] = $data['email'];
-                $response['phone'] = $data['phone'];
+                $response['first_name'] = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $data['first_name']);
+                $response['last_name'] = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $data['last_name']);
+                $response['patronymic'] = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $data['patronymic']);
+                $response['email'] = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $data['email']);
+                $response['phone'] = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $data['phone']);
                 $response['content'] = $data['content'];
                 $response['created_at'] = $time->modify('+1 hour')
                     ->modify('+30 minute')
@@ -113,7 +113,7 @@ class Database
      * Функция для отправки письма на почту
      *
      * @param array $data (данные для отправки на почту)
-     *
+     * @throws \PHPMailer\PHPMailer\Exception (ошибка отправки сообщения)
      */
     private function sendMail(array $data): void
     {
