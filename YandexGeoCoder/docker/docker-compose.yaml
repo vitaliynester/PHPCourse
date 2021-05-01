@@ -1,0 +1,23 @@
+version: '3.1'
+services:
+
+  php:
+    container_name: geocoder_site
+    build: php-fpm
+    restart: always
+    ports:
+      - '9002:9000'
+    volumes:
+      - ../.:/var/www/geocoder:cached
+
+  nginx:
+    container_name: geocoder_nginx
+    restart: always
+    build: nginx
+    ports:
+      - '80:80'
+    links:
+      - php
+    volumes:
+      - ../.:/var/www/geocoder:cached
+      - ./var/logs/nginx/:/var/log/geocoder:cached
