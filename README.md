@@ -6,5 +6,5 @@
 | [№3. Взаимодействие с FRONTEND](https://github.com/vitaliynester/PHPCourse/tree/master/Lab3) |<div style="text-align:center">✔️</div>||
 | [№4. Безопасность](https://github.com/vitaliynester/PHPCourse/tree/master/Lab4) |<div style="text-align:center">⌚️</div>||
 | [№5. RegEx](https://github.com/vitaliynester/PHPCourse/tree/master/Lab3) |<div style="text-align:center">⌚️</div>||
-| [№6. Внедрение сторонних библиотек](https://github.com/vitaliynester/PHPCourse/tree/master/Lab3) |<div style="text-align:center">⌚️</div>||
+| [№6. Внедрение сторонних библиотек](https://github.com/vitaliynester/PersonalLibrary) |<div style="text-align:center">⌚️</div>||
 | [№7. REST](https://github.com/vitaliynester/PHPCourse/tree/master/YandexGeoCoder) |<div style="text-align:center">⌚️</div>||
